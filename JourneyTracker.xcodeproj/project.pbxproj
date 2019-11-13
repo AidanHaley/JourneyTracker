@@ -9,12 +9,13 @@
 /* Begin PBXBuildFile section */
 		8C1845B2237C5A0D00C0D72F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1845B1237C5A0D00C0D72F /* AppDelegate.swift */; };
 		8C1845B4237C5A0D00C0D72F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1845B3237C5A0D00C0D72F /* SceneDelegate.swift */; };
-		8C1845B6237C5A0D00C0D72F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1845B5237C5A0D00C0D72F /* ViewController.swift */; };
+		8C1845B6237C5A0D00C0D72F /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1845B5237C5A0D00C0D72F /* MapViewController.swift */; };
 		8C1845B9237C5A0D00C0D72F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8C1845B7237C5A0D00C0D72F /* Main.storyboard */; };
 		8C1845BC237C5A0D00C0D72F /* JourneyTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8C1845BA237C5A0D00C0D72F /* JourneyTracker.xcdatamodeld */; };
 		8C1845BE237C5A0F00C0D72F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C1845BD237C5A0F00C0D72F /* Assets.xcassets */; };
 		8C1845C1237C5A0F00C0D72F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8C1845BF237C5A0F00C0D72F /* LaunchScreen.storyboard */; };
 		8C1845CC237C5A0F00C0D72F /* JourneyTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1845CB237C5A0F00C0D72F /* JourneyTrackerTests.swift */; };
+		8C1845DB237C647500C0D72F /* JourneyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1845DA237C647500C0D72F /* JourneyViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,7 +32,7 @@
 		8C1845AE237C5A0D00C0D72F /* JourneyTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JourneyTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C1845B1237C5A0D00C0D72F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8C1845B3237C5A0D00C0D72F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		8C1845B5237C5A0D00C0D72F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		8C1845B5237C5A0D00C0D72F /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		8C1845B8237C5A0D00C0D72F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8C1845BB237C5A0D00C0D72F /* JourneyTracker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JourneyTracker.xcdatamodel; sourceTree = "<group>"; };
 		8C1845BD237C5A0F00C0D72F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -40,6 +41,7 @@
 		8C1845C7237C5A0F00C0D72F /* JourneyTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JourneyTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C1845CB237C5A0F00C0D72F /* JourneyTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyTrackerTests.swift; sourceTree = "<group>"; };
 		8C1845CD237C5A0F00C0D72F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8C1845DA237C647500C0D72F /* JourneyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,7 +124,8 @@
 		8C1845D8237C5D2B00C0D72F /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
-				8C1845B5237C5A0D00C0D72F /* ViewController.swift */,
+				8C1845B5237C5A0D00C0D72F /* MapViewController.swift */,
+				8C1845DA237C647500C0D72F /* JourneyViewController.swift */,
 			);
 			path = Dashboard;
 			sourceTree = "<group>";
@@ -235,7 +238,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C1845B6237C5A0D00C0D72F /* ViewController.swift in Sources */,
+				8C1845DB237C647500C0D72F /* JourneyViewController.swift in Sources */,
+				8C1845B6237C5A0D00C0D72F /* MapViewController.swift in Sources */,
 				8C1845B2237C5A0D00C0D72F /* AppDelegate.swift in Sources */,
 				8C1845B4237C5A0D00C0D72F /* SceneDelegate.swift in Sources */,
 				8C1845BC237C5A0D00C0D72F /* JourneyTracker.xcdatamodeld in Sources */,
@@ -400,7 +404,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3V8RM54MN3;
-				INFOPLIST_FILE = JourneyTracker/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/JourneyTracker/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -418,7 +422,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3V8RM54MN3;
-				INFOPLIST_FILE = JourneyTracker/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/JourneyTracker/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
