@@ -81,14 +81,10 @@
 		8C1845B0237C5A0D00C0D72F /* JourneyTracker */ = {
 			isa = PBXGroup;
 			children = (
-				8C1845B1237C5A0D00C0D72F /* AppDelegate.swift */,
-				8C1845B3237C5A0D00C0D72F /* SceneDelegate.swift */,
-				8C1845B5237C5A0D00C0D72F /* ViewController.swift */,
-				8C1845B7237C5A0D00C0D72F /* Main.storyboard */,
-				8C1845BD237C5A0F00C0D72F /* Assets.xcassets */,
-				8C1845BF237C5A0F00C0D72F /* LaunchScreen.storyboard */,
-				8C1845C2237C5A0F00C0D72F /* Info.plist */,
-				8C1845BA237C5A0D00C0D72F /* JourneyTracker.xcdatamodeld */,
+				8C1845D9237C5D4300C0D72F /* Services */,
+				8C1845D8237C5D2B00C0D72F /* Dashboard */,
+				8C1845D7237C5D1A00C0D72F /* Models */,
+				8C1845D6237C5D0E00C0D72F /* Resources */,
 			);
 			path = JourneyTracker;
 			sourceTree = "<group>";
@@ -100,6 +96,42 @@
 				8C1845CD237C5A0F00C0D72F /* Info.plist */,
 			);
 			path = JourneyTrackerTests;
+			sourceTree = "<group>";
+		};
+		8C1845D6237C5D0E00C0D72F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8C1845B1237C5A0D00C0D72F /* AppDelegate.swift */,
+				8C1845B3237C5A0D00C0D72F /* SceneDelegate.swift */,
+				8C1845B7237C5A0D00C0D72F /* Main.storyboard */,
+				8C1845BD237C5A0F00C0D72F /* Assets.xcassets */,
+				8C1845BF237C5A0F00C0D72F /* LaunchScreen.storyboard */,
+				8C1845C2237C5A0F00C0D72F /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		8C1845D7237C5D1A00C0D72F /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8C1845BA237C5A0D00C0D72F /* JourneyTracker.xcdatamodeld */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		8C1845D8237C5D2B00C0D72F /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				8C1845B5237C5A0D00C0D72F /* ViewController.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		8C1845D9237C5D4300C0D72F /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
