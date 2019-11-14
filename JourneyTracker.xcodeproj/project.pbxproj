@@ -16,6 +16,9 @@
 		8C1845C1237C5A0F00C0D72F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8C1845BF237C5A0F00C0D72F /* LaunchScreen.storyboard */; };
 		8C1845CC237C5A0F00C0D72F /* JourneyTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1845CB237C5A0F00C0D72F /* JourneyTrackerTests.swift */; };
 		8C1845DB237C647500C0D72F /* JourneyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1845DA237C647500C0D72F /* JourneyViewController.swift */; };
+		8C1845E6237E02EF00C0D72F /* TrackingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1845E5237E02EF00C0D72F /* TrackingManager.swift */; };
+		8CDFE8E8237E0E3600A3C464 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CDFE8E7237E0E3600A3C464 /* CoreDataManager.swift */; };
+		8CDFE8EF237E136D00A3C464 /* JourneyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CDFE8EE237E136D00A3C464 /* JourneyTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +45,9 @@
 		8C1845CB237C5A0F00C0D72F /* JourneyTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyTrackerTests.swift; sourceTree = "<group>"; };
 		8C1845CD237C5A0F00C0D72F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C1845DA237C647500C0D72F /* JourneyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyViewController.swift; sourceTree = "<group>"; };
+		8C1845E5237E02EF00C0D72F /* TrackingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TrackingManager.swift; path = JourneyTracker/Models/TrackingManager.swift; sourceTree = SOURCE_ROOT; };
+		8CDFE8E7237E0E3600A3C464 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		8CDFE8EE237E136D00A3C464 /* JourneyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				8C1845BA237C5A0D00C0D72F /* JourneyTracker.xcdatamodeld */,
+				8CDFE8E7237E0E3600A3C464 /* CoreDataManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -124,6 +131,7 @@
 		8C1845D8237C5D2B00C0D72F /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
+				8CDFE8E9237E11FC00A3C464 /* Cells */,
 				8C1845B5237C5A0D00C0D72F /* MapViewController.swift */,
 				8C1845DA237C647500C0D72F /* JourneyViewController.swift */,
 			);
@@ -133,8 +141,17 @@
 		8C1845D9237C5D4300C0D72F /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				8C1845E5237E02EF00C0D72F /* TrackingManager.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		8CDFE8E9237E11FC00A3C464 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				8CDFE8EE237E136D00A3C464 /* JourneyTableViewCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -238,10 +255,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C1845E6237E02EF00C0D72F /* TrackingManager.swift in Sources */,
 				8C1845DB237C647500C0D72F /* JourneyViewController.swift in Sources */,
 				8C1845B6237C5A0D00C0D72F /* MapViewController.swift in Sources */,
 				8C1845B2237C5A0D00C0D72F /* AppDelegate.swift in Sources */,
+				8CDFE8EF237E136D00A3C464 /* JourneyTableViewCell.swift in Sources */,
 				8C1845B4237C5A0D00C0D72F /* SceneDelegate.swift in Sources */,
+				8CDFE8E8237E0E3600A3C464 /* CoreDataManager.swift in Sources */,
 				8C1845BC237C5A0D00C0D72F /* JourneyTracker.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
