@@ -17,8 +17,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     
     //Vars
     fileprivate let locationManager:CLLocationManager = CLLocationManager()
-    
-    private var journey: Journey?
+        
     private var enabled = false
     private var seconds = 0
     private var timer: Timer?
@@ -53,7 +52,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     
         //invalidate timers
         timer?.invalidate()
-       // locationManager.stopUpdatingLocation()
     }
     
     //MARK: LM Delegate Methods
@@ -94,7 +92,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         
       let renderer = MKPolylineRenderer(polyline: polyline)
       renderer.strokeColor = .blue
-      renderer.lineWidth = 3
+      renderer.lineWidth = 5
         
       return renderer
     }
@@ -123,34 +121,34 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
                 self.startJourney()
             }
             
-            //set to enabled
+            //set tracking enabled
             self.enabled = true
-            print("TRACKING")
         } else {
             //Run once before disabled set
             if enabled == true {
                 self.stopJourney()
             }
 
-            //Set to disbled
+            //Set tracking disbled
             self.enabled = false
-            print("NOT TRACKING")
         }
     }
     
-    func journeyTick() {
+    func increment() {
         //increment duration
         seconds += 1
     }
     
     func startJourney() {
+        //Clear previous journey data
         seconds = 0
         distance = Measurement(value: 0, unit: UnitLength.meters)
         locationList.removeAll()
         mapView.removeOverlays(mapView.overlays)
         
+        //Set timer
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-          self.journeyTick()
+          self.increment()
         }
     }
     
@@ -162,9 +160,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         
         alertController.addAction(UIAlertAction(title: "Save", style: .default) { _ in
+            
+            //Post Refresh notification
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshNotification"), object: nil)
+            }
+
           self.saveJourney()
         })
-     
+        
         present(alertController, animated: true)
     }
     
@@ -183,8 +187,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
       }
       
       CoreDataManager.saveContext()
-      
-      journey = newJourney
     }
     
 }
