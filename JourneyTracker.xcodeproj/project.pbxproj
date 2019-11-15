@@ -122,8 +122,8 @@
 		8C1845D7237C5D1A00C0D72F /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				8C1845BA237C5A0D00C0D72F /* JourneyTracker.xcdatamodeld */,
 				8CDFE8E7237E0E3600A3C464 /* CoreDataManager.swift */,
+				8C1845BA237C5A0D00C0D72F /* JourneyTracker.xcdatamodeld */,
 			);
 			path = Models;
 			sourceTree = "<group>";

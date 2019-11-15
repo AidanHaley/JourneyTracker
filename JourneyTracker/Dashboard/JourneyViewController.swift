@@ -64,6 +64,11 @@ class JourneyViewController: UIViewController, UITableViewDataSource, UITableVie
                 self.updateView()
             }
         }
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.tableView.reloadData()
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -87,6 +92,14 @@ class JourneyViewController: UIViewController, UITableViewDataSource, UITableVie
            return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let journey = fetchedResultsController.object(at: indexPath)
+        let locations = journey.locations
+      
+        print(locations)
+        
+    }
+    
     private func configureView() {
         updateView()
     }
@@ -102,6 +115,16 @@ class JourneyViewController: UIViewController, UITableViewDataSource, UITableVie
         messageLabel.isHidden = hasJourneys
 
         activityIndicator.stopAnimating()
+    }
+    
+    @IBAction func switchChanged(_ sender: Any) {
+        //Set tracking on/off
+        if trackingSwitch.isOn == true {
+            TrackingManager.sharedInstance.trackingEnabled = true
+        } else {
+            TrackingManager.sharedInstance.trackingEnabled = false
+        }
+        
     }
     
 }

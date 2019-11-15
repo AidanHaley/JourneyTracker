@@ -19,11 +19,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     fileprivate let locationManager:CLLocationManager = CLLocationManager()
     
     private var journey: Journey?
+    private var enabled = false
     private var seconds = 0
     private var timer: Timer?
+    private var checkTracking: Timer?
     private var distance = Measurement(value: 0, unit: UnitLength.meters)
     private var locationList: [CLLocation] = []
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -32,6 +34,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.distanceFilter = kCLDistanceFilterNone
         locationManager.activityType = .fitness
+        
+        //Assign Delegate
+        self.locationManager.delegate = self
+        
+        //Start timer
+        checkTracking = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+          self.tick()
+        }
         
         //Configure map
         self.configureMap()
@@ -43,7 +53,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     
         //invalidate timers
         timer?.invalidate()
-        locationManager.stopUpdatingLocation()
+       // locationManager.stopUpdatingLocation()
     }
     
     //MARK: LM Delegate Methods
@@ -56,12 +66,38 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         if let lastLocation = locationList.last {
           let delta = newLocation.distance(from: lastLocation)
           distance = distance + Measurement(value: delta, unit: UnitLength.meters)
+            
+            //Only draw overlay if tracking enabled
+            if TrackingManager.sharedInstance.trackingEnabled == true {
+                
+            let coordinates = [lastLocation.coordinate, newLocation.coordinate]
+            mapView.addOverlay(MKPolyline(coordinates: coordinates, count: 2))
+            
+            let region = MKCoordinateRegion(center: newLocation.coordinate, latitudinalMeters: 500, longitudinalMeters: 500)
+            mapView.setRegion(region, animated: true)
+                
+            } else {
+                //otherwise clear drawn routes from map
+                self.mapView.removeOverlays(self.mapView.overlays)
+            }
+            
         }
 
         locationList.append(newLocation)
       }
     }
     
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+      guard let polyline = overlay as? MKPolyline else {
+        return MKOverlayRenderer(overlay: overlay)
+      }
+        
+      let renderer = MKPolylineRenderer(polyline: polyline)
+      renderer.strokeColor = .blue
+      renderer.lineWidth = 3
+        
+      return renderer
+    }
     
     private func configureMap() {
         
@@ -80,16 +116,41 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     }
     
     func tick() {
-      seconds += 1
+        //Check tracking
+        if TrackingManager.sharedInstance.trackingEnabled == true {
+            //Run once before Enabled set
+            if enabled == false {
+                self.startJourney()
+            }
+            
+            //set to enabled
+            self.enabled = true
+            print("TRACKING")
+        } else {
+            //Run once before disabled set
+            if enabled == true {
+                self.stopJourney()
+            }
+
+            //Set to disbled
+            self.enabled = false
+            print("NOT TRACKING")
+        }
+    }
+    
+    func journeyTick() {
+        //increment duration
+        seconds += 1
     }
     
     func startJourney() {
         seconds = 0
         distance = Measurement(value: 0, unit: UnitLength.meters)
         locationList.removeAll()
+        mapView.removeOverlays(mapView.overlays)
         
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-          self.tick()
+          self.journeyTick()
         }
     }
     
@@ -112,7 +173,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
       newJourney.distance = distance.value
       newJourney.duration = Int16(seconds)
       newJourney.timestamp = Date()
-      
+              
       for location in locationList {
         let locationObject = Location(context: CoreDataManager.context)
         locationObject.timestamp = location.timestamp

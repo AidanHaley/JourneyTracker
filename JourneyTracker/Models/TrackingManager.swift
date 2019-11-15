@@ -8,8 +8,8 @@
 
 import Foundation
 
-class TrackingEnabled {
-    static let sharedInstance = TrackingEnabled()
+class TrackingManager {
+    static let sharedInstance = TrackingManager()
     
     var trackingEnabled = Bool()
     var Locations = [Location]()
