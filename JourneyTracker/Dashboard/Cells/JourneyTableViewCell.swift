@@ -11,9 +11,10 @@ import UIKit
 class JourneyTableViewCell: UITableViewCell {
     
     //Outlets
-    @IBOutlet var timestampLabel: UILabel!
-    @IBOutlet var durationLabel: UILabel!
-
+    @IBOutlet var startTimeLabel: UILabel!
+    @IBOutlet var endTimeLabel: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
+    
     //Vars
     static let reuseIdentifier = "JourneyCell"
 

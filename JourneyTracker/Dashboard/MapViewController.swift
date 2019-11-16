@@ -19,9 +19,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     fileprivate let locationManager:CLLocationManager = CLLocationManager()
         
     private var enabled = false
+    private var confirmed = false
     private var seconds = 0
     private var timer: Timer?
     private var checkTracking: Timer?
+    private var journeyName: String?
     private var distance = Measurement(value: 0, unit: UnitLength.meters)
     private var locationList: [CLLocation] = []
         
@@ -122,7 +124,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             }
             
             //set tracking enabled
-            self.enabled = true
+                self.enabled = true
         } else {
             //Run once before disabled set
             if enabled == true {
@@ -130,8 +132,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             }
 
             //Set tracking disbled
-            self.enabled = false
-        }
+                self.enabled = false
+            }
+            
     }
     
     func increment() {
@@ -153,23 +156,34 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     }
     
     func stopJourney() {
-        let alertController = UIAlertController(title: "End Journey?",
-                                                message: "Do you wish to stop tracking your Journey?",
-                                                preferredStyle: .actionSheet)
-        
-        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        
-        alertController.addAction(UIAlertAction(title: "Save", style: .default) { _ in
             
-            //Post Refresh notification
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshNotification"), object: nil)
+            //Get journey name from user
+            let alert = UIAlertController(title: "Journey Title", message: "Please enter a name", preferredStyle: .alert)
+
+            alert.addTextField { (textField) in
+                textField.text = "Journey: \(Date())"
             }
 
-          self.saveJourney()
-        })
-        
-        present(alertController, animated: true)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
+                let textField = alert?.textFields![0]
+                
+                //Check textfield not empty
+                if textField?.text != "" {
+                    self.journeyName = textField?.text
+                } else {
+                    self.journeyName = "Journey: \(Date())"
+                }
+                
+                //Post Refresh notification after name submitted
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshNotification"), object: nil)
+                }
+                
+                self.saveJourney()
+            }))
+
+            self.present(alert, animated: true, completion: nil)
+
     }
     
     private func saveJourney() {
@@ -177,6 +191,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
       newJourney.distance = distance.value
       newJourney.duration = Int16(seconds)
       newJourney.timestamp = Date()
+      newJourney.name = self.journeyName
+        
+        print(newJourney.name)
               
       for location in locationList {
         let locationObject = Location(context: CoreDataManager.context)

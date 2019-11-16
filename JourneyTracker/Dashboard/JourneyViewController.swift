@@ -22,9 +22,9 @@ class JourneyViewController: UIViewController, UITableViewDataSource, UITableVie
     //Vars
     private let persistentContainer = NSPersistentContainer(name: "JourneyTracker")
     private let refreshControl = UIRefreshControl()
-    var selectedJourney: Journey?
+    private var selectedJourney: Journey?
 
-    var journeys = [Journey]() {
+    private var journeys = [Journey]() {
         didSet {
             updateView()
         }
@@ -51,6 +51,7 @@ class JourneyViewController: UIViewController, UITableViewDataSource, UITableVie
         
         //Listen for notification
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: Notification.Name(rawValue: "refreshNotification"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(resetSwitch), name: Notification.Name(rawValue: "resetSwitch"), object: nil)
 
         // load/fetch tableView data
         self.fetchData()
@@ -96,10 +97,15 @@ class JourneyViewController: UIViewController, UITableViewDataSource, UITableVie
            let journey = fetchedResultsController.object(at: indexPath)
 
            // Configure Cell
-            cell.timestampLabel.text = journey.timestamp?.description
-            cell.durationLabel.text = journey.duration.description
+            cell.nameLabel.text = journey.name
+            cell.startTimeLabel.text = journey.timestamp?.description
+            cell.endTimeLabel.text = journey.timestamp?.description
 
            return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100.0
     }
     
     private func mapRegion() -> MKCoordinateRegion? {
@@ -218,6 +224,13 @@ class JourneyViewController: UIViewController, UITableViewDataSource, UITableVie
         self.tableView.reloadData()
     }
     
+    @objc func resetSwitch() {
+        
+        //Set switch to on
+        self.trackingSwitch.isOn = true
+        
+    }
+    
     private func updateView() {
         //Updates view when data is loaded
         var hasJourneys = false
@@ -237,8 +250,8 @@ class JourneyViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     @IBAction func switchChanged(_ sender: Any) {
-        //Set tracking on/off
         
+        //Set tracking on/off
         if trackingSwitch.isOn == true {
             TrackingManager.sharedInstance.trackingEnabled = true
             
@@ -249,7 +262,7 @@ class JourneyViewController: UIViewController, UITableViewDataSource, UITableVie
             
             //Reload tableView
             reloadData()
-        }
+            }
         
     }
     
