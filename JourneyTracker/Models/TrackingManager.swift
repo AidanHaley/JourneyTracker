@@ -12,5 +12,4 @@ class TrackingManager {
     static let sharedInstance = TrackingManager()
     
     var trackingEnabled = Bool()
-    var Locations = [Location]()
 }

@@ -27,6 +27,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     private var distance = Measurement(value: 0, unit: UnitLength.meters)
     private var locationList: [CLLocation] = []
         
+    
+    //MARK: - Delegate Methods
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -56,7 +59,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         timer?.invalidate()
     }
     
-    //MARK: LM Delegate Methods
+    //MARK: LManager Delegate Methods
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
       for newLocation in locations {
@@ -86,6 +89,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         locationList.append(newLocation)
       }
     }
+    
+    //MARK: - Map Delegate Methods
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
       guard let polyline = overlay as? MKPolyline else {
@@ -192,9 +197,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
       newJourney.duration = Int16(seconds)
       newJourney.timestamp = Date()
       newJourney.name = self.journeyName
-        
-        print(newJourney.name)
-              
+                      
       for location in locationList {
         let locationObject = Location(context: CoreDataManager.context)
         locationObject.timestamp = location.timestamp

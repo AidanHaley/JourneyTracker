@@ -45,13 +45,14 @@ class JourneyViewController: UIViewController, UITableViewDataSource, UITableVie
 
         return fetchedResultsController
     }()
+    
+    //MARK: - Delegate Methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //Listen for notification
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: Notification.Name(rawValue: "refreshNotification"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(resetSwitch), name: Notification.Name(rawValue: "resetSwitch"), object: nil)
 
         // load/fetch tableView data
         self.fetchData()
@@ -72,6 +73,8 @@ class JourneyViewController: UIViewController, UITableViewDataSource, UITableVie
         self.mapView.isHidden = true
     }
     
+    //MARK: - TableView Delegate Methods
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let journey = fetchedResultsController.object(at: indexPath)
         self.selectedJourney = nil
@@ -87,26 +90,32 @@ class JourneyViewController: UIViewController, UITableViewDataSource, UITableVie
 
         return journeys.count
     }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-           guard let cell = tableView.dequeueReusableCell(withIdentifier: JourneyTableViewCell.reuseIdentifier, for: indexPath) as? JourneyTableViewCell else {
-               fatalError("Unexpected Index Path")
-           }
-
-           // Fetch Journey
-           let journey = fetchedResultsController.object(at: indexPath)
-
-           // Configure Cell
-            cell.nameLabel.text = journey.name
-            cell.startTimeLabel.text = journey.timestamp?.description
-            cell.endTimeLabel.text = journey.timestamp?.description
-
-           return cell
-    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100.0
     }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+           guard let cell = tableView.dequeueReusableCell(withIdentifier: JourneyTableViewCell.reuseIdentifier, for: indexPath) as? JourneyTableViewCell else {
+               fatalError("Unexpected IndexPath")
+           }
+
+           // Fetch Journey
+           let journey = fetchedResultsController.object(at: indexPath)
+        
+           //Format Dates
+           let duration: TimeInterval = Double(journey.duration)
+           let finishTime = journey.timestamp?.addingTimeInterval(duration)
+
+           // Configure Cell
+            cell.nameLabel.text = journey.name
+            cell.startTimeLabel.text = "Start time: \(formatDate(date: journey.timestamp! as NSDate))"
+            cell.endTimeLabel.text = "End time: \(formatDate(date: finishTime! as NSDate))"
+
+           return cell
+    }
+    
+    //MARK: - Map Delegate Methods
     
     private func mapRegion() -> MKCoordinateRegion? {
       guard
@@ -138,6 +147,16 @@ class JourneyViewController: UIViewController, UITableViewDataSource, UITableVie
       return MKCoordinateRegion(center: center, span: span)
     }
     
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+      guard let polyline = overlay as? MKPolyline else {
+        return MKOverlayRenderer(overlay: overlay)
+      }
+      let renderer = MKPolylineRenderer(polyline: polyline)
+      renderer.strokeColor = .blue
+      renderer.lineWidth = 5
+      return renderer
+    }
+    
     private func polyLine() -> MKPolyline {
         guard let locSet = self.selectedJourney!.locations else {
         return MKPolyline()
@@ -145,39 +164,30 @@ class JourneyViewController: UIViewController, UITableViewDataSource, UITableVie
         
         //Sort locations by timestamp
         let locations = locSet.sortedArray(using: [NSSortDescriptor(key: "timestamp", ascending: true)])
-     
-      let coords: [CLLocationCoordinate2D] = locations.map { location in
+        let coords: [CLLocationCoordinate2D] = locations.map { location in
         let location = location as! Location
+            
         return CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
       }
       return MKPolyline(coordinates: coords, count: coords.count)
     }
     
-     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-       guard let polyline = overlay as? MKPolyline else {
-         return MKOverlayRenderer(overlay: overlay)
-       }
-       let renderer = MKPolylineRenderer(polyline: polyline)
-       renderer.strokeColor = .blue
-       renderer.lineWidth = 5
-       return renderer
-     }
-    
     private func loadMap() {
-      guard
-        let locations = self.selectedJourney!.locations,
-        locations.count > 0,
-        let region = mapRegion()
-      else {
+        //Load locations and add polyline overlay
+        guard let locations = self.selectedJourney!.locations, locations.count > 0, let region = mapRegion() else {
+            
           let alert = UIAlertController(title: "Error",
                                         message: "Sorry, this run has no locations saved",
                                         preferredStyle: .alert)
+            
           alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+            
           present(alert, animated: true)
+            
           return
       }
         
-      mapView.setRegion(region, animated: true)
+        mapView.setRegion(region, animated: true)
         mapView.addOverlay(polyLine())
     }
     
@@ -204,9 +214,10 @@ class JourneyViewController: UIViewController, UITableViewDataSource, UITableVie
     
     @objc func reloadData() {
         //If refresh control not active
-        if refreshControl.isRefreshing == false {
+         if refreshControl.isRefreshing == false {
+            activityIndicator.isHidden = false
             activityIndicator.startAnimating()
-        }
+          }
         
         //Fetch data
         do {
@@ -217,18 +228,13 @@ class JourneyViewController: UIViewController, UITableViewDataSource, UITableVie
             print("\(fetchError), \(fetchError.localizedDescription)")
         }
         
-        self.refreshControl.endRefreshing()
-        activityIndicator.stopAnimating()
-
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.refreshControl.endRefreshing()
+            self.activityIndicator.stopAnimating()
+        }
+        
         self.updateView()
         self.tableView.reloadData()
-    }
-    
-    @objc func resetSwitch() {
-        
-        //Set switch to on
-        self.trackingSwitch.isOn = true
-        
     }
     
     private func updateView() {
@@ -248,6 +254,15 @@ class JourneyViewController: UIViewController, UITableViewDataSource, UITableVie
         
         activityIndicator.stopAnimating()
     }
+    
+    private func formatDate(date: NSDate) -> String {
+        let dateFormatterPrint = DateFormatter()
+        dateFormatterPrint.dateFormat = "HH:mm:ss - dd-MM-yyyy "
+                
+        return dateFormatterPrint.string(from: date as Date)
+    }
+    
+    //MARK: - Outlets
     
     @IBAction func switchChanged(_ sender: Any) {
         
